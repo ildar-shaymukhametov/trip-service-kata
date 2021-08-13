@@ -17,25 +17,6 @@ namespace TripServiceTests
             Assert.Throws<UserNotLoggedInException>(() => sut.GetTripsByUser(new User()));
         }
 
-        private static IUserSession StubUserSession(User userToReturn = null)
-        {
-            var stub = Substitute.For<IUserSession>();
-            if (userToReturn == null)
-            {
-                stub.GetLoggedUser().ReturnsNull();
-            }
-            else
-            {
-                stub.GetLoggedUser().Returns(userToReturn);
-            }
-            return stub;
-        }
-
-        private static TripService CreateSut(IUserSession userSession, ITripDAO tripDAO = null)
-        {
-            return new TripService(userSession, tripDAO ?? Substitute.For<ITripDAO>());
-        }
-
         [Fact]
         public void Returns_no_trips_if_user_not_friend()
         {
@@ -57,6 +38,25 @@ namespace TripServiceTests
             var sut = CreateSut(stubUserSession, stubTripDAO);
             var trips = sut.GetTripsByUser(user);
             Assert.Collection(trips, x => Assert.True(x.Name == trip.Name));
+        }
+
+        private static IUserSession StubUserSession(User userToReturn = null)
+        {
+            var stub = Substitute.For<IUserSession>();
+            if (userToReturn == null)
+            {
+                stub.GetLoggedUser().ReturnsNull();
+            }
+            else
+            {
+                stub.GetLoggedUser().Returns(userToReturn);
+            }
+            return stub;
+        }
+
+        private static TripService CreateSut(IUserSession userSession, ITripDAO tripDAO = null)
+        {
+            return new TripService(userSession, tripDAO ?? Substitute.For<ITripDAO>());
         }
     }
 }
