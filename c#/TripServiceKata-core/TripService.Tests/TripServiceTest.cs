@@ -26,7 +26,7 @@ namespace TripServiceTests
         }
 
         [Fact]
-        public void Returns_trips_if_user_is_friend()
+        public void Returns_trips_if_user_is_friend_of_logged_in_user()
         {
             var loggedInUser = new User();
             var stubUserSession = StubUserSession(loggedInUser);
