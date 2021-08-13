@@ -20,8 +20,9 @@ namespace TripServiceTests
         [Fact]
         public void Returns_no_trips_if_user_not_friend()
         {
-            var stub = StubUserSession(new User());
-            var trips = CreateSut(stub).GetTripsByUser(new User());
+            var loggedInUser = new User();
+            var user = new User();
+            var trips = CreateSut(StubUserSession(loggedInUser)).GetTripsByUser(user);
             Assert.Empty(trips);
         }
 
