@@ -29,10 +29,7 @@ namespace TripServiceTests
         {
             var stub = Substitute.For<IUserSession>();
             stub.GetLoggedUser().Returns(new User());
-            var user = new User();
-            user.AddTrip(new Trip("foo"));
-            var sut = CreateSut(stub);
-            var trips = sut.GetTripsByUser(user);
+            var trips = CreateSut(stub).GetTripsByUser(new User());
             Assert.Empty(trips);
         }
 
