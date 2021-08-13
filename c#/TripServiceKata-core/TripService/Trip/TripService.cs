@@ -18,7 +18,6 @@ namespace ContosoTrips.Trips
 
         public List<Trip> GetTripsByUser(User user)
         {
-            List<Trip> tripList = new List<Trip>();
             User loggedUser = userSession.GetLoggedUser();
             if (loggedUser == null)
             {
@@ -26,6 +25,7 @@ namespace ContosoTrips.Trips
             }
 
             bool isFriend = user.GetFriends().Any(x => x.Equals(loggedUser));
+            List<Trip> tripList = new List<Trip>();
             if (isFriend)
             {
                 tripList = tripDAO.GetTripsBy(user);
