@@ -12,7 +12,7 @@ namespace TripServiceTests
         [Fact]
         public void Throws_if_user_not_logged_in()
         {
-            var stub = Substitute.For<IUserProvider>();
+            var stub = Substitute.For<IUserSession>();
             stub.GetLoggedUser().ReturnsNull();
             var sut = new TripService(stub);
             Assert.Throws<UserNotLoggedInException>(() => sut.GetTripsByUser(new User()));
@@ -21,7 +21,7 @@ namespace TripServiceTests
         [Fact]
         public void Returns_no_trips_if_user_not_friend()
         {
-            var stub = Substitute.For<IUserProvider>();
+            var stub = Substitute.For<IUserSession>();
             stub.GetLoggedUser().Returns(new User());
             var user = new User();
             user.AddTrip(new Trip("foo"));
