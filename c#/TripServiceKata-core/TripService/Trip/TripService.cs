@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ContosoTrips.Exceptions;
 using ContosoTrips.Users;
 
@@ -19,20 +20,12 @@ namespace ContosoTrips.Trips
         {
             List<Trip> tripList = new List<Trip>();
             User loggedUser = userSession.GetLoggedUser();
-            bool isFriend = false;
             if (loggedUser == null)
             {
                 throw new UserNotLoggedInException();
             }
 
-            foreach (User friend in user.GetFriends())
-            {
-                if (friend.Equals(loggedUser))
-                {
-                    isFriend = true;
-                    break;
-                }
-            }
+            bool isFriend = user.GetFriends().Any(x => x.Equals(loggedUser));
             if (isFriend)
             {
                 tripList = tripDAO.GetTripsBy(user);
