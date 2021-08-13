@@ -7,10 +7,12 @@ namespace ContosoTrips.Trips
     public class TripService
     {
         private readonly IUserSession userSession;
+        private readonly ITripDAO tripDAO;
 
-        public TripService(IUserSession userSession)
+        public TripService(IUserSession userSession, ITripDAO tripDAO)
         {
             this.userSession = userSession;
+            this.tripDAO = tripDAO;
         }
 
         public List<Trip> GetTripsByUser(User user)
@@ -30,7 +32,7 @@ namespace ContosoTrips.Trips
                 }
                 if (isFriend)
                 {
-                    tripList = TripDAO.FindTripsByUser(user);
+                    tripList = tripDAO.GetTripsBy(user);
                 }
                 return tripList;
             }
