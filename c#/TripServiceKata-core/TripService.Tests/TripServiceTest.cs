@@ -15,7 +15,8 @@ namespace TripServiceTests
         {
             var user = new User();
             User loggedInUser = null;
-            var sut = CreateSut(StubUserSession(loggedInUser));
+            var stubUserSession = StubUserSession(loggedInUser);
+            var sut = CreateSut(stubUserSession);
 
             Assert.Throws<UserNotLoggedInException>(() => sut.GetTripsByUser(user));
         }
