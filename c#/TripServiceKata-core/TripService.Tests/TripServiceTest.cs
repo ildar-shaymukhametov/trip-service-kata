@@ -13,10 +13,22 @@ namespace TripServiceTests
         [Fact]
         public void Throws_if_user_not_logged_in()
         {
+            var sut = CreateSut(StubUserSession());
+            Assert.Throws<UserNotLoggedInException>(() => sut.GetTripsByUser(new User()));
+        }
+
+        private static IUserSession StubUserSession(User userToReturn = null)
+        {
             var stub = Substitute.For<IUserSession>();
-            stub.GetLoggedUser().ReturnsNull();
-            var sut = CreateSut(stub);
-            Assert.Throws<UserNotLoggedInException>(() => CreateSut(stub).GetTripsByUser(new User()));
+            if (userToReturn == null)
+            {
+                stub.GetLoggedUser().ReturnsNull();
+            }
+            else
+            {
+                stub.GetLoggedUser().Returns(userToReturn);
+            }
+            return stub;
         }
 
         private static TripService CreateSut(IUserSession userSession, ITripDAO tripDAO = null)
@@ -27,8 +39,7 @@ namespace TripServiceTests
         [Fact]
         public void Returns_no_trips_if_user_not_friend()
         {
-            var stub = Substitute.For<IUserSession>();
-            stub.GetLoggedUser().Returns(new User());
+            var stub = StubUserSession(new User());
             var trips = CreateSut(stub).GetTripsByUser(new User());
             Assert.Empty(trips);
         }
@@ -36,9 +47,8 @@ namespace TripServiceTests
         [Fact]
         public void Returns_trips_if_user_is_friend()
         {
-            var stubUserSession = Substitute.For<IUserSession>();
             var loggedInUser = new User();
-            stubUserSession.GetLoggedUser().Returns(loggedInUser);
+            var stubUserSession = StubUserSession(loggedInUser);
             var user = new User();
             user.AddFriend(loggedInUser);
             var trip = new Trip("foo");
