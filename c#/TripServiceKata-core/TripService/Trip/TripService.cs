@@ -20,26 +20,24 @@ namespace ContosoTrips.Trips
             List<Trip> tripList = new List<Trip>();
             User loggedUser = userSession.GetLoggedUser();
             bool isFriend = false;
-            if (loggedUser != null)
-            {
-                foreach (User friend in user.GetFriends())
-                {
-                    if (friend.Equals(loggedUser))
-                    {
-                        isFriend = true;
-                        break;
-                    }
-                }
-                if (isFriend)
-                {
-                    tripList = tripDAO.GetTripsBy(user);
-                }
-                return tripList;
-            }
-            else
+            if (loggedUser == null)
             {
                 throw new UserNotLoggedInException();
             }
+
+            foreach (User friend in user.GetFriends())
+            {
+                if (friend.Equals(loggedUser))
+                {
+                    isFriend = true;
+                    break;
+                }
+            }
+            if (isFriend)
+            {
+                tripList = tripDAO.GetTripsBy(user);
+            }
+            return tripList;
         }
     }
 }
